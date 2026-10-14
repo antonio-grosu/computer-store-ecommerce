@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" rx="16" fill="#e3f4f1"/>
+  <ellipse cx="200" cy="268" rx="175" ry="14" fill="#c9e7e1"/>
+
+  <!-- monitor -->
+  <rect x="38" y="42" width="226" height="148" rx="10" fill="#14213d"/>
+  <rect x="50" y="54" width="202" height="122" rx="4" fill="#2a9d8f"/>
+  <rect x="64" y="70" width="96" height="12" rx="4" fill="#e3f4f1"/>
+  <rect x="64" y="92" width="150" height="8" rx="3" fill="#a8dbd2"/>
+  <rect x="64" y="108" width="130" height="8" rx="3" fill="#a8dbd2"/>
+  <rect x="64" y="132" width="52" height="30" rx="4" fill="#14213d" opacity="0.35"/>
+  <rect x="124" y="132" width="52" height="30" rx="4" fill="#14213d" opacity="0.35"/>
+  <rect x="184" y="132" width="52" height="30" rx="4" fill="#14213d" opacity="0.35"/>
+  <rect x="136" y="190" width="30" height="34" fill="#14213d"/>
+  <rect x="104" y="220" width="94" height="10" rx="5" fill="#14213d"/>
+
+  <!-- tower -->
+  <rect x="290" y="58" width="82" height="196" rx="8" fill="#14213d"/>
+  <circle cx="331" cy="86" r="8" fill="none" stroke="#2a9d8f" stroke-width="3"/>
+  <rect x="304" y="108" width="54" height="6" rx="3" fill="#2b3a5a"/>
+  <rect x="304" y="120" width="54" height="6" rx="3" fill="#2b3a5a"/>
+  <circle cx="331" cy="170" r="22" fill="#2b3a5a"/>
+  <circle cx="331" cy="170" r="16" fill="none" stroke="#2a9d8f" stroke-width="2"/>
+  <circle cx="331" cy="170" r="4" fill="#2a9d8f"/>
+  <circle cx="331" cy="224" r="12" fill="#2b3a5a"/>
+
+  <!-- keyboard and mouse -->
+  <rect x="46" y="240" width="214" height="24" rx="6" fill="#8a99b1"/>
+  <g fill="#cfd6e3">
+    <rect x="56" y="246" width="12" height="5" rx="1"/>
+    <rect x="72" y="246" width="12" height="5" rx="1"/>
+    <rect x="88" y="246" width="12" height="5" rx="1"/>
+    <rect x="104" y="246" width="12" height="5" rx="1"/>
+    <rect x="120" y="246" width="12" height="5" rx="1"/>
+    <rect x="136" y="246" width="12" height="5" rx="1"/>
+    <rect x="152" y="246" width="12" height="5" rx="1"/>
+    <rect x="168" y="246" width="12" height="5" rx="1"/>
+    <rect x="184" y="246" width="12" height="5" rx="1"/>
+    <rect x="200" y="246" width="12" height="5" rx="1"/>
+    <rect x="216" y="246" width="12" height="5" rx="1"/>
+    <rect x="232" y="246" width="18" height="5" rx="1"/>
+    <rect x="80" y="255" width="146" height="5" rx="1"/>
+  </g>
+  <rect x="268" y="240" width="16" height="25" rx="8" fill="#8a99b1"/>
+</svg>

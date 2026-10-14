@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'store.context_processors.date_firma',
             ],
         },
     },
@@ -117,6 +118,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+# Company data, sent to every template by store.context_processors.date_firma
+
+DATE_FIRMA = {
+    'nume': 'Computer Store SRL',
+    'an_infiintare': 2015,
+    'telefon': '021 123 4567',
+    'adresa': 'Bulevardul Electronicii 12, Bucuresti',
+    'email': 'contact@computerstore.ro',
+    'program': [
+        'Luni - Vineri: 09:00 - 19:00',
+        'Sambata: 10:00 - 15:00',
+        'Duminica: inchis',
+    ],
+}
 
 
 # Email

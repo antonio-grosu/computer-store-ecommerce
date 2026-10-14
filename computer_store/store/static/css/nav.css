@@ -1,0 +1,387 @@
+:root {
+  --culoare-inchisa: #14213d;
+  --culoare-accent: #2a9d8f;
+  --culoare-accent-deschis: #e3f4f1;
+  --culoare-text: #1f2933;
+  --culoare-fundal: #eef2f7;
+  --culoare-eroare: #b3261e;
+  --latime-maxima: 1100px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--culoare-text);
+  background: var(--culoare-fundal) url("../imagini/fundal.svg");
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--culoare-accent);
+}
+
+/* ---------- header and menu ---------- */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--culoare-inchisa);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.antet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  max-width: var(--latime-maxima);
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.meniu {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.meniu li {
+  position: relative;
+}
+
+.meniu a {
+  display: block;
+  padding: 0.6rem 0.85rem;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 4px;
+}
+
+.meniu a:hover,
+.meniu a:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.are-submeniu > a::after {
+  content: " \25BE";
+  font-size: 0.8em;
+}
+
+.meniu .cos {
+  background: var(--culoare-accent);
+}
+
+.meniu .cos:hover,
+.meniu .cos:focus-visible {
+  background: #23867a;
+}
+
+/* dropdown: hidden until the parent item is hovered or receives keyboard focus */
+.submeniu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 210px;
+  padding: 0.35rem 0;
+  background: white;
+  border-top: 3px solid var(--culoare-accent);
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+}
+
+.meniu li:hover > .submeniu,
+.meniu li:focus-within > .submeniu {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+.submeniu a {
+  color: var(--culoare-text);
+  border-radius: 0;
+}
+
+.submeniu a:hover,
+.submeniu a:focus-visible {
+  background: var(--culoare-accent-deschis);
+}
+
+/* ---------- content ---------- */
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--latime-maxima);
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+h1 {
+  margin-top: 0;
+  color: var(--culoare-inchisa);
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--culoare-inchisa);
+}
+
+section {
+  margin-bottom: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(20, 33, 61, 0.1);
+  /* anchors from the submenus should not end up under the sticky header */
+  scroll-margin-top: 6rem;
+}
+
+section:target {
+  outline: 3px solid var(--culoare-accent);
+}
+
+.sectiune-cu-imagine {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.sectiune-cu-imagine img {
+  border-radius: 8px;
+}
+
+.categorii {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.categorii li {
+  padding: 0.6rem;
+  text-align: center;
+  background: var(--culoare-accent-deschis);
+  border-radius: 6px;
+}
+
+.cronologie li {
+  margin-bottom: 0.5rem;
+}
+
+.cronologie strong {
+  display: inline-block;
+  min-width: 3.5rem;
+  color: var(--culoare-accent);
+}
+
+.in-lucru {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.eroare {
+  padding: 0.6rem 0.9rem;
+  color: var(--culoare-eroare);
+  background: #fdecea;
+  border-left: 4px solid var(--culoare-eroare);
+  border-radius: 4px;
+}
+
+.tabel-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #dde3ec;
+}
+
+th {
+  color: white;
+  background: var(--culoare-inchisa);
+}
+
+tbody tr:nth-child(even) {
+  background: #f6f8fb;
+}
+
+.detalii-accesare {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.4rem 1.5rem;
+}
+
+.detalii-accesare dt {
+  font-weight: 600;
+}
+
+.detalii-accesare dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- footer ---------- */
+
+footer {
+  color: #cfd6e3;
+  background: var(--culoare-inchisa);
+}
+
+footer a {
+  color: white;
+}
+
+.subsol {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem 2rem;
+  max-width: var(--latime-maxima);
+  margin: 0 auto;
+  padding: 1.5rem 1rem 0.5rem;
+}
+
+.subsol p,
+.subsol ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.titlu-subsol {
+  margin-bottom: 0.4rem !important;
+  font-weight: 700;
+  color: white;
+}
+
+.subsol-jos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  max-width: var(--latime-maxima);
+  margin: 0 auto;
+  padding: 0.75rem 1rem 1rem;
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.subsol-jos p {
+  margin: 0;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 900px) {
+  .categorii {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .subsol {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  header {
+    position: static;
+  }
+
+  .antet {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .meniu {
+    flex-direction: column;
+  }
+
+  /* on small screens the submenu opens inside the list instead of floating over the page */
+  .submeniu {
+    position: static;
+    display: none;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.06);
+    border-top: 0;
+    box-shadow: none;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+
+  .meniu li:hover > .submeniu,
+  .meniu li:focus-within > .submeniu {
+    display: block;
+  }
+
+  .submeniu a {
+    padding-left: 2rem;
+    color: white;
+  }
+
+  .submeniu a:hover,
+  .submeniu a:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .sectiune-cu-imagine,
+  .subsol {
+    grid-template-columns: 1fr;
+  }
+
+  section {
+    padding: 1rem;
+  }
+
+  /* keep rows on one line, the table container scrolls sideways instead */
+  th,
+  td {
+    white-space: nowrap;
+  }
+}

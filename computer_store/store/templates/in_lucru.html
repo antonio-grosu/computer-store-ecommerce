@@ -1,0 +1,13 @@
+{% extends "baza.html" %}
+{% block title %}In lucru{% endblock %}
+{%block content %}
+<section class="in-lucru">
+  <h1>In lucru</h1>
+  <p>
+    Pagina {{ nume_pagina }} este in curs de realizare si va fi disponibila intr-o versiune
+    viitoare a site-ului. Pana atunci ne poti vizita in magazin sau ne poti suna la
+    {{ firma.telefon }}.
+  </p>
+  <p><a href="{% url 'index' %}">Inapoi la prima pagina</a></p>
+</section>
+{% endblock %}

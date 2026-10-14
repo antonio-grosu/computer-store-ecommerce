@@ -1,0 +1,29 @@
+{% extends "baza.html" %}
+{% load static %}
+{% block title %}Despre noi{% endblock %}
+{%block content %}
+<h1>Despre noi</h1>
+
+<section id="cine-suntem" class="sectiune-cu-imagine">
+  <img src="{% static 'imagini/magazin.svg' %}" alt="Fatada magazinului Computer Store" width="400" height="300">
+  <div>
+    <h2>Cine suntem</h2>
+    <p>
+      {{ firma.nume }} vinde componente si sisteme de calcul din {{ firma.an_infiintare }}.
+      Avem un magazin fizic in Bucuresti si livram comenzi online in toata tara.
+      Lucram direct cu distribuitorii producatorilor, asa ca toate produsele au garantie
+      oficiala in Romania.
+    </p>
+  </div>
+</section>
+
+<section id="echipa">
+  <h2>Echipa</h2>
+  <p>In magazin si in atelierul de service lucreaza 12 oameni:</p>
+  <ul>
+    <li>consultanti de vanzari, care te ajuta sa alegi componente compatibile;</li>
+    <li>tehnicieni de service, pentru asamblare, diagnosticare si reparatii;</li>
+    <li>echipa de logistica, care pregateste si trimite comenzile online.</li>
+  </ul>
+</section>
+{% endblock %}

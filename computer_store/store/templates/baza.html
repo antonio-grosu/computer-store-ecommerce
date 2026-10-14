@@ -1,20 +1,86 @@
+{% load static %}
 <!doctype html>
-<html>
+<html lang="ro">
   <head>
-    <title>{% block title %}Pagina mea{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Computer Store{% endblock %}</title>
+    <link rel="icon" href="{% static 'imagini/logo.svg' %}" type="image/svg+xml">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
   </head>
   <body>
     <header>
-      <h1>Site-ul meu</h1>
-      <nav>
-        <ul>
-          <li><a href='{%url "info" %}'>Info</a></li>
-        </ul>
-      </nav>
+      <div class="antet">
+        <a class="logo" href="{% url 'index' %}">
+          <img src="{% static 'imagini/logo.svg' %}" alt="" width="40" height="40">
+          Computer Store
+        </a>
+        <nav>
+          <ul class="meniu">
+            <li class="are-submeniu">
+              <a href="{% url 'index' %}">Acasa</a>
+              <ul class="submeniu">
+                <li><a href="{% url 'index' %}#promotii">Promotii curente</a></li>
+                <li><a href="{% url 'index' %}#categorii">Categorii de produse</a></li>
+                <li><a href="{% url 'index' %}#program">Program de lucru</a></li>
+              </ul>
+            </li>
+            <li class="are-submeniu">
+              <a href="{% url 'produse' %}">Produse</a>
+              <ul class="submeniu">
+                <li><a href="{% url 'produse' %}">Toate produsele</a></li>
+                <li><a href="{% url 'configurator' %}">Configurator PC</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'service' %}">Service</a></li>
+            <li class="are-submeniu">
+              <a href="{% url 'despre' %}">Despre noi</a>
+              <ul class="submeniu">
+                <li><a href="{% url 'despre' %}#cine-suntem">Cine suntem</a></li>
+                <li><a href="{% url 'despre' %}#echipa">Echipa</a></li>
+                <li><a href="{% url 'istoric' %}">Istoric</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+            <li class="are-submeniu">
+              <a href="{% url 'info' %}">Server</a>
+              <ul class="submeniu">
+                <li><a href="{% url 'info' %}">Informatii server</a></li>
+                <li><a href="{% url 'log' %}">Jurnal accesari</a></li>
+              </ul>
+            </li>
+            <li><a class="cos" href="{% url 'cos_virtual' %}">Cos virtual</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
     <main>{% block content %}{% endblock %}</main>
     <footer>
-      <p>© 2026 Site-ul meu</p>
+      <div class="subsol">
+        <div>
+          <p class="titlu-subsol">{{ firma.nume }}</p>
+          <p>Infiintata in {{ firma.an_infiintare }}<br>{{ firma.adresa }}</p>
+        </div>
+        <div>
+          <p class="titlu-subsol">Contact</p>
+          <p>
+            Telefon: <a href="tel:{{ firma.telefon }}">{{ firma.telefon }}</a><br>
+            Email: <a href="mailto:{{ firma.email }}">{{ firma.email }}</a>
+          </p>
+        </div>
+        <div>
+          <p class="titlu-subsol">Program</p>
+          <ul>
+            {% for interval in firma.program %}
+            <li>{{ interval }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="subsol-jos">
+        <p>{{ copyright }}</p>
+        <p>IP-ul tau: {{ request.ip_client }}</p>
+      </div>
     </footer>
   </body>
 </html>

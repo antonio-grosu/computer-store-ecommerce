@@ -1,10 +1,62 @@
-{% extends "baza.html" %} {% block title %}Computer Store{% endblock %}
+{% extends "baza.html" %}
+{% load static %}
+{% block title %}Computer Store{% endblock %}
 {%block content %}
 <h1>Computer Store</h1>
-<p>
-  Computer Store este un magazin online de componente si sisteme pentru calculatoare.
-  Site-ul prezinta procesoare, placi video, placi de baza, memorii RAM, unitati de stocare
-  si periferice. Vizitatorii pot cauta si filtra produsele dupa categorie, pret sau
-  producator, le pot adauga in cos si pot plasa comenzi.
-</p>
+
+<section id="despre-magazin" class="sectiune-cu-imagine">
+  <img src="{% static 'imagini/calculator.svg' %}" alt="Calculator desktop cu monitor, tastatura si mouse" width="400" height="300">
+  <div>
+    <h2>Despre magazin</h2>
+    <p>
+      Computer Store este un magazin online de componente si sisteme pentru calculatoare.
+      Site-ul prezinta procesoare, placi video, placi de baza, memorii RAM, unitati de stocare
+      si periferice. Vizitatorii pot cauta si filtra produsele dupa categorie, pret sau
+      producator, le pot adauga in cos si pot plasa comenzi.
+    </p>
+  </div>
+</section>
+
+<section id="promotii">
+  <h2>Promotii curente</h2>
+  <ul>
+    <li>10% reducere la toate unitatile SSD, pana la sfarsitul lunii.</li>
+    <li>Asamblare gratuita pentru orice sistem cumparat pe componente.</li>
+    <li>Transport gratuit pentru comenzile de peste 500 de lei.</li>
+  </ul>
+</section>
+
+<section id="categorii">
+  <h2>Categorii de produse</h2>
+  <ul class="categorii">
+    <li>Procesoare</li>
+    <li>Placi video</li>
+    <li>Placi de baza</li>
+    <li>Memorii RAM</li>
+    <li>Stocare</li>
+    <li>Surse si carcase</li>
+    <li>Monitoare</li>
+    <li>Periferice</li>
+  </ul>
+</section>
+
+<section id="program">
+  <h2>Program de lucru</h2>
+  <p>Magazinul fizic din {{ firma.adresa }} este deschis:</p>
+  <ul>
+    {% for interval in firma.program %}
+    <li>{{ interval }}</li>
+    {% endfor %}
+  </ul>
+  <p>Comenzile online se pot plasa oricand.</p>
+</section>
+
+<section id="avantaje">
+  <h2>De ce sa cumperi de la noi</h2>
+  <ul>
+    <li>Garantie de minim 24 de luni pentru toate produsele noi.</li>
+    <li>Service propriu pentru diagnosticare, reparatii si upgrade.</li>
+    <li>Consultanta la alegerea componentelor compatibile.</li>
+  </ul>
+</section>
 {% endblock %}

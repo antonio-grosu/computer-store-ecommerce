@@ -1,0 +1,29 @@
+{% extends "baza.html" %}
+{% block title %}Accesarea {{ id_accesare }}{% endblock %}
+{%block content %}
+<h1>Accesarea {{ id_accesare }}</h1>
+
+<section>
+  {% if accesare %}
+  <dl class="detalii-accesare">
+    <dt>id</dt><dd>{{ accesare.id }}</dd>
+    <dt>ip_client</dt><dd>{{ accesare.ip_client }}</dd>
+    <dt>url</dt><dd>{{ accesare.url }}</dd>
+    <dt>string_url</dt><dd>{{ accesare.string_url }}</dd>
+    <dt>pagina</dt><dd>{{ accesare.pagina }}</dd>
+    <dt>data</dt><dd>{{ data }}</dd>
+    <dt>lista_parametri</dt>
+    <dd>
+      {% for nume, valoare in accesare.lista_parametri %}
+      {{ nume }} = {{ valoare }}{% if not forloop.last %}, {% endif %}
+      {% empty %}
+      niciun parametru
+      {% endfor %}
+    </dd>
+  </dl>
+  {% else %}
+  <p class="eroare">Nu exista accesarea cu id-ul {{ id_accesare }}.</p>
+  {% endif %}
+  <p><a href="{% url 'log' %}">Inapoi la jurnal</a></p>
+</section>
+{% endblock %}

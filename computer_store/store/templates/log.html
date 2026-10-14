@@ -1,0 +1,76 @@
+{% extends "baza.html" %}
+{% block title %}Jurnal accesari{% endblock %}
+{%block content %}
+<h1>Jurnal accesari</h1>
+
+<section id="accesari">
+  <h2>Accesari</h2>
+  {% if coloane %}
+  <div class="tabel-container">
+    <table>
+      <thead>
+        <tr>{% for coloana in coloane %}<th>{{ coloana }}</th>{% endfor %}</tr>
+      </thead>
+      <tbody>
+        {% for rand in randuri %}
+        <tr>{% for valoare in rand %}<td>{{ valoare }}</td>{% endfor %}</tr>
+        {% empty %}
+        <tr><td colspan="{{ coloane|length }}">Nicio accesare de afisat.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <ul>
+    {% for accesare in selectie %}
+    <li>
+      <a href="{% url 'accesare' id_accesare=accesare.id %}">Accesarea {{ accesare.id }}</a>:
+      {{ accesare.pagina }}, {{ accesare.string_url }}, IP {{ accesare.ip_client }}
+    </li>
+    {% empty %}
+    <li>Nicio accesare de afisat.</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% for eroare in erori %}
+  <p class="eroare">{{ eroare }}</p>
+  {% endfor %}
+
+  <p>
+    Cea mai accesata pagina: {{ pagini_maxim|join:", " }}
+    ({{ maxim }} accesar{{ maxim|pluralize:"e,i" }})<br>
+    Cea mai putin accesata pagina: {{ pagini_minim|join:", " }}
+    ({{ minim }} accesar{{ minim|pluralize:"e,i" }})
+  </p>
+</section>
+
+{% if afiseaza_nr %}
+<section id="numar-accesari">
+  <h2>Numar accesari</h2>
+  <p>Numarul de accesari de la pornirea serverului: {{ numar_accesari }}.</p>
+</section>
+{% endif %}
+
+{% if afiseaza_detalii %}
+<section id="detalii">
+  <h2>Detalii accesari</h2>
+  <ul>
+    {% for id_accesare, data in detalii %}
+    <li>Accesarea {{ id_accesare }}: {{ data }}</li>
+    {% empty %}
+    <li>Nicio accesare de afisat.</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section id="parametri">
+  <h2>Parametri</h2>
+  {% if parametri %}
+  <p>Pagina a primit {{ parametri|length }} parametr{{ parametri|length|pluralize:"u,i" }}: {{ parametri|join:", " }}.</p>
+  {% else %}
+  <p>Pagina nu a primit niciun parametru.</p>
+  {% endif %}
+</section>
+{% endblock %}

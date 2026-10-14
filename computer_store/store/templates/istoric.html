@@ -1,0 +1,16 @@
+{% extends "baza.html" %}
+{% block title %}Istoric{% endblock %}
+{%block content %}
+<h1>Istoric</h1>
+
+<section>
+  <h2>Cum am ajuns aici</h2>
+  <ol class="cronologie">
+    <li><strong>{{ firma.an_infiintare }}</strong> Deschidem primul magazin, cu doar cateva rafturi de componente PC.</li>
+    <li><strong>2017</strong> Amenajam atelierul de service propriu.</li>
+    <li><strong>2020</strong> Lansam magazinul online, cu livrare in toata tara.</li>
+    <li><strong>2023</strong> Introducem asamblarea de sisteme la comanda.</li>
+    <li><strong>2026</strong> Lucram la un configurator online pentru sisteme personalizate.</li>
+  </ol>
+</section>
+{% endblock %}
