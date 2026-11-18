@@ -54,7 +54,7 @@ Cheile primare sunt subliniate in diagrama. Cheile straine nu apar ca atribute, 
   - `nume: string`
   - `descriere: string`
   - `culoare: string` culoarea reprezentativa (cod hex), folosita la stilizare
-  - `sigla: string` numele unui icon FontAwesome sau calea catre o imagine
+  - `sigla: string` calea catre imaginea siglei (fisier SVG, PNG, JPG sau WEBP)
   - `ordine_afisare: int` pozitia categoriei in meniuri si liste
 - **Brand**: producatorul unui produs.
   - `id_brand: int` cheia primara
@@ -66,10 +66,10 @@ Cheile primare sunt subliniate in diagrama. Cheile straine nu apar ca atribute, 
   - `id_produs: int` cheia primara
   - `nume: string`
   - `descriere: string`
-  - `pret: float` pretul de vanzare, in lei
+  - `pret: decimal` pretul de vanzare, in lei
   - `stoc: int` numarul de bucati disponibile
   - `garantie_luni: int`
-  - `data_adaugare: date` data la care produsul a aparut in magazin
+  - `data_adaugare: datetime` data si ora la care produsul a fost adaugat in magazin
   - `stare: enum` una dintre valorile nou, resigilat, reconditionat
   - `transport_gratuit: boolean`
   - `greutate_kg: float`
@@ -89,7 +89,7 @@ Cheile primare sunt subliniate in diagrama. Cheile straine nu apar ca atribute, 
   - `id_serviciu: int` cheia primara
   - `nume: string`
   - `descriere: string`
-  - `pret: float`
+  - `pret: decimal`
   - `durata_zile: int` in cate zile este efectuat serviciul
   - `la_domiciliu: boolean` daca serviciul se poate face la client acasa
 
@@ -98,7 +98,7 @@ Cheile primare sunt subliniate in diagrama. Cheile straine nu apar ca atribute, 
 | Relatie | Entitati | Cardinalitate | Explicatie |
 |---|---|---|---|
 | contine | Categorie, Produs | 1 : N | Fiecare produs are exact o categorie (participare totala a lui Produs), o categorie are oricate produse. |
-| produce | Brand, Produs | 1 : N | Fiecare produs are un brand, un brand are oricate produse. |
+| produce | Brand, Produs | 1 : N | Fiecare produs are exact un brand (participare totala a lui Produs), un brand are oricate produse. |
 | are | Produs, SpecificatieTehnica | 1 : N | Relatie de identificare. Fiecare specificatie apartine exact unui produs (participare totala). |
 | include | Promotie, Produs | M : N | O promotie cuprinde mai multe produse, un produs poate fi in mai multe promotii. Tabelul asociativ nu apare in diagrama. |
 | se aplica la | ServiciuAditional, Categorie | M : N | Un serviciu se ofera pentru mai multe categorii (asamblarea pentru procesoare, placi de baza, placi video), o categorie are mai multe servicii. |
@@ -120,8 +120,10 @@ SpecificatieTehnica este entitate slaba, deoarece:
 |---|---|
 | string | nume, descriere, culoare, sigla, tara_origine, site_web, nume_specificatie, valoare |
 | int | stoc, garantie_luni, an_infiintare, ordine_afisare, procent_reducere, durata_zile |
-| float | pret, greutate_kg |
-| date | data_adaugare, data_inceput, data_sfarsit |
+| decimal | pret |
+| float | greutate_kg |
+| date | data_inceput, data_sfarsit |
+| datetime | data_adaugare |
 | boolean | transport_gratuit, evidentiata, la_domiciliu |
 | enum | stare (nou, resigilat, reconditionat) |
 | vector (string[]) | culori_disponibile |
