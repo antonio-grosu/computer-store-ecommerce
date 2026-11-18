@@ -7,6 +7,7 @@
     <title>{% block title %}Computer Store{% endblock %}</title>
     <link rel="icon" href="{% static 'imagini/logo.svg' %}" type="image/svg+xml">
     <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/produse.css' %}">
   </head>
   <body>
     <header>
@@ -30,6 +31,18 @@
               <ul class="submeniu">
                 <li><a href="{% url 'produse' %}">Toate produsele</a></li>
                 <li><a href="{% url 'configurator' %}">Configurator PC</a></li>
+              </ul>
+            </li>
+            <li class="are-submeniu">
+              <a href="{% url 'produse' %}">Categorii</a>
+              <ul class="submeniu">
+                {% for categorie_meniu in categorii_meniu %}
+                <li>
+                  <a class="link-categorie" href="{{ categorie_meniu.get_absolute_url }}" style="--culoare-categorie: {{ categorie_meniu.culoare }}">
+                    {{ categorie_meniu.nume }} ({{ categorie_meniu.numar_produse }})
+                  </a>
+                </li>
+                {% endfor %}
               </ul>
             </li>
             <li><a href="{% url 'service' %}">Service</a></li>

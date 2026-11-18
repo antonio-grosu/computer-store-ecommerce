@@ -1,0 +1,118 @@
+{% extends "store/baza.html" %}
+{% block title %}{{ titlu }}{% endblock %}
+{% block content %}
+{% if categorie %}
+<section class="antet-categorie" style="--culoare-categorie: {{ categorie.culoare }}">
+  <img src="{{ categorie.sigla.url }}" alt="">
+  <div>
+    <h1>{{ categorie.nume }}</h1>
+    <p>{{ categorie.descriere }}</p>
+  </div>
+</section>
+{% else %}
+<h1>{{ titlu }}</h1>
+{% endif %}
+
+{% for eroare in erori %}
+<p class="eroare">{{ eroare }}</p>
+{% endfor %}
+
+<section class="bara-produse">
+  <form class="sortare" method="get">
+    {% for tag in taguri_active %}
+    <input type="hidden" name="tag" value="{{ tag }}">
+    {% endfor %}
+    <label>
+      Sorteaza dupa
+      <select name="coloana">
+        {% for valoare, eticheta in coloane %}
+        <option value="{{ valoare }}"{% if valoare == coloana %} selected{% endif %}>{{ eticheta }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Ordine
+      <select name="sort">
+        <option value="a"{% if sort == "a" %} selected{% endif %}>crescatoare</option>
+        <option value="d"{% if sort == "d" %} selected{% endif %}>descrescatoare</option>
+      </select>
+    </label>
+    <button type="submit">Sorteaza</button>
+  </form>
+
+  {% if taguri_active %}
+  <div class="taguri-active">
+    <span>Taguri active:</span>
+    {% for tag, url in linkuri_taguri_active %}
+    <a class="tag-activ" href="{{ url }}" title="Elimina tagul {{ tag }}">{{ tag }} <span aria-hidden="true">&times;</span></a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+
+{% if pagina.paginator.count %}
+<p>
+  Se afiseaza produsele intre {{ pagina.start_index }} si {{ pagina.end_index }}
+  din totalul de {{ pagina.paginator.count }} produse.
+</p>
+
+{% partialdef paginare inline %}
+<nav class="paginare" aria-label="Paginare">
+  {% if pagina.has_previous %}
+  <a href="{% querystring pagina=pagina.previous_page_number %}">&larr; Pagina anterioara</a>
+  {% else %}
+  <span></span>
+  {% endif %}
+  <span>Pagina {{ pagina.number }} din {{ pagina.paginator.num_pages }}</span>
+  {% if pagina.has_next %}
+  <a href="{% querystring pagina=pagina.next_page_number %}">Pagina urmatoare &rarr;</a>
+  {% else %}
+  <span></span>
+  {% endif %}
+</nav>
+{% endpartialdef %}
+
+<ul class="lista-produse">
+  {% for produs in pagina %}
+  <li class="card-produs{% if produs.stoc_limitat %} card-stoc-limitat{% endif %}" style="--culoare-categorie: {{ produs.categorie.culoare }}">
+    <a href="{{ produs.get_absolute_url }}" tabindex="-1">
+      <img class="imagine-card" src="{{ produs.url_imagine }}" alt="">
+    </a>
+    <a class="categorie-produs" href="{{ produs.categorie.get_absolute_url }}">
+      <img src="{{ produs.categorie.sigla.url }}" alt="">
+      {{ produs.categorie.nume }}
+    </a>
+    <h2><a href="{{ produs.get_absolute_url }}">{{ produs.nume }}</a></h2>
+    {% if produs.specificatii_evidentiate %}
+    <ul class="specificatii-card">
+      {% for specificatie in produs.specificatii_evidentiate|slice:":3" %}
+      <li><span>{{ specificatie.nume_specificatie }}:</span> {{ specificatie.valoare }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <p class="pret">{{ produs.pret }} lei</p>
+    {% if produs.stoc_limitat %}
+    <p class="stoc-limitat">{% if produs.stoc %}Stoc limitat: {{ produs.stoc }} buc.{% else %}Stoc epuizat{% endif %}</p>
+    {% endif %}
+    {% if produs.linkuri_taguri %}
+    <ul class="taguri">
+      {% for tag, url, activ in produs.linkuri_taguri %}
+      <li><a href="{{ url }}"{% if activ %} class="activ"{% endif %}>{{ tag }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+
+{% partial paginare %}
+{% else %}
+<section>
+  {% if taguri_active %}
+  <p>Niciun produs nu are toate tagurile selectate.</p>
+  {% else %}
+  <p>Nu exista produse in aceasta categorie.</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

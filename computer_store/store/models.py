@@ -1,7 +1,11 @@
+from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
 from django.core.validators import FileExtensionValidator, MaxValueValidator, RegexValidator
 from django.db import models
 from django.db.models import F, Q
+from django.templatetags.static import static
+from django.urls import reverse
 
 
 class Categorie(models.Model):
@@ -36,6 +40,9 @@ class Categorie(models.Model):
 
     def __str__(self):
         return self.nume
+
+    def get_absolute_url(self):
+        return reverse("categorie", args=[self.nume])
 
 
 class Brand(models.Model):
@@ -91,6 +98,13 @@ class Produs(models.Model):
         blank=True,
         help_text="Culorile separate prin virgula, de exemplu: negru,alb. Se poate lasa gol.",
     )
+    taguri = ArrayField(
+        models.CharField(max_length=30),
+        default=list,
+        blank=True,
+        help_text="Cuvinte cheie separate prin virgula, de exemplu: gaming,am5. Se folosesc la filtrarea produselor.",
+    )
+    imagine = models.ImageField(upload_to="produse/", null=True, blank=True)
     categorie = models.ForeignKey(Categorie, on_delete=models.PROTECT, related_name="produse")
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name="produse")
 
@@ -101,6 +115,7 @@ class Produs(models.Model):
         indexes = [
             models.Index(fields=["pret"]),
             models.Index(fields=["data_adaugare"]),
+            GinIndex(fields=["taguri"]),
             models.Index(fields=["stare"]),
         ]
         constraints = [
@@ -123,6 +138,17 @@ class Produs(models.Model):
 
     def __str__(self):
         return f"{self.nume} ({self.pret} lei)"
+
+    def get_absolute_url(self):
+        return reverse("produs", args=[self.pk])
+
+    def url_imagine(self):
+        if self.imagine:
+            return self.imagine.url
+        return static("imagini/imagine_indisponibila.svg")
+
+    def stoc_limitat(self):
+        return self.stoc < settings.STOC_MIN
 
 
 class SpecificatieTehnica(models.Model):

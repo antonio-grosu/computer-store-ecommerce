@@ -1,0 +1,71 @@
+{% extends "store/baza.html" %}
+{% block title %}{{ produs.nume }}{% endblock %}
+{% block content %}
+<section class="produs-detaliu" style="--culoare-categorie: {{ produs.categorie.culoare }}">
+  <img class="imagine-produs" src="{{ produs.url_imagine }}" alt="{{ produs.nume }}">
+  <div>
+    <a class="categorie-produs" href="{{ produs.categorie.get_absolute_url }}">
+      <img src="{{ produs.categorie.sigla.url }}" alt="">
+      {{ produs.categorie.nume }}
+    </a>
+    <h1>{{ produs.nume }}</h1>
+    <p class="pret">{{ produs.pret }} lei</p>
+    {% if produs.stoc_limitat %}
+    <p class="stoc-limitat">
+      {% if produs.stoc %}Stoc limitat: doar {{ produs.stoc }} buc.{% else %}Stoc epuizat{% endif %}
+    </p>
+    {% else %}
+    <p class="in-stoc">In stoc ({{ produs.stoc }} buc.)</p>
+    {% endif %}
+    {% if produs.descriere %}<p>{{ produs.descriere }}</p>{% endif %}
+    <dl class="detalii-produs">
+      <dt>Brand</dt><dd>{{ produs.brand.nume }}</dd>
+      <dt>Stare</dt><dd>{{ produs.get_stare_display }}</dd>
+      <dt>Garantie</dt><dd>{{ produs.garantie_luni }} luni</dd>
+      <dt>Transport</dt><dd>{% if produs.transport_gratuit %}gratuit{% else %}cu plata{% endif %}</dd>
+      {% if produs.greutate_kg %}<dt>Greutate</dt><dd>{{ produs.greutate_kg }} kg</dd>{% endif %}
+      {% if produs.culori_disponibile %}<dt>Culori</dt><dd>{{ produs.culori_disponibile|join:", " }}</dd>{% endif %}
+      <dt>Adaugat pe</dt><dd>{{ produs.data_adaugare|date:"d.m.Y" }}</dd>
+    </dl>
+    {% if produs.taguri %}
+    <ul class="taguri">
+      {% for tag in produs.taguri %}
+      <li><a href="{% url 'produse' %}?tag={{ tag|urlencode }}">{{ tag }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+</section>
+
+{% if specificatii %}
+<section>
+  <h2>Specificatii tehnice</h2>
+  <div class="tabel-container">
+    <table>
+      <tbody>
+        {% for specificatie in specificatii %}
+        <tr><th scope="row">{{ specificatie.nume_specificatie }}</th><td>{{ specificatie.valoare }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+<section>
+  <h2>Produse din aceeasi categorie</h2>
+  <ul class="grila-produse">
+    {% for alt_produs in asemanatoare %}
+    <li class="card-mic">
+      <a href="{{ alt_produs.get_absolute_url }}">
+        <img src="{{ alt_produs.url_imagine }}" alt="">
+        <span class="nume-card">{{ alt_produs.nume }}</span>
+        <span class="pret">{{ alt_produs.pret }} lei</span>
+      </a>
+    </li>
+    {% empty %}
+    <li>Nu exista alte produse in aceasta categorie.</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

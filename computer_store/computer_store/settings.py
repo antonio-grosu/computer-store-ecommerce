@@ -65,6 +65,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'store.context_processors.date_firma',
+                'store.context_processors.categorii_meniu',
             ],
         },
     },
@@ -142,6 +143,10 @@ DATE_FIRMA = {
         'Duminica: inchis',
     ],
 }
+
+STOC_MIN = 5
+PROD_ACEEASI_CATEGORIE = 4
+PROD_PER_PAG = 6
 
 
 # Email

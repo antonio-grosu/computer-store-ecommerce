@@ -74,6 +74,8 @@ Cheile primare sunt subliniate in diagrama. Cheile straine nu apar ca atribute, 
   - `transport_gratuit: boolean`
   - `greutate_kg: float`
   - `culori_disponibile: string[]` atribut multivaloare, de exemplu [negru, alb]
+  - `taguri: string[]` atribut multivaloare, cuvinte cheie folosite la filtrarea produselor, de exemplu [gaming, am5]
+  - `imagine: string` calea catre imaginea produsului (optionala)
 - **SpecificatieTehnica** (entitate slaba): o caracteristica tehnica a unui produs, de exemplu Frecventa = 3.6 GHz sau Memorie video = 8 GB.
   - `nume_specificatie: string` cheia partiala
   - `valoare: string`
@@ -126,11 +128,11 @@ SpecificatieTehnica este entitate slaba, deoarece:
 | datetime | data_adaugare |
 | boolean | transport_gratuit, evidentiata, la_domiciliu |
 | enum | stare (nou, resigilat, reconditionat) |
-| vector (string[]) | culori_disponibile |
+| vector (string[]) | culori_disponibile, taguri |
 
 ### Forma normala 3
 
-- **1NF**: toate atributele au valori atomice, cu exceptia `culori_disponibile`, care este vectorul cerut in enunt (singura abatere permisa). Fiecare entitate are o cheie.
+- **1NF**: toate atributele au valori atomice, cu exceptia vectorilor `culori_disponibile` (cerut in laboratorul 2) si `taguri` (cerut in laboratorul 4 ca `ArrayField`). Fiecare entitate are o cheie.
 - **2NF**: entitatile cu cheie simpla nu pot avea dependente partiale. Singura cheie compusa este cea a lui SpecificatieTehnica (`id_produs`, `nume_specificatie`), iar `valoare` si `evidentiata` depind de cheia intreaga: aceeasi specificatie are alta valoare la alt produs. Din acest motiv unitatea de masura nu este un atribut separat, deoarece ar fi depins doar de `nume_specificatie`.
 - **3NF**: niciun atribut care nu face parte din cheie nu depinde de un alt astfel de atribut. Datele despre categorie si brand nu se repeta in Produs, ci sunt in entitati separate (de exemplu `tara_origine` este la Brand, nu la Produs).
 - **Fara atribute calculabile**: nu exista `pret_redus` (se calculeaza din `pret` si `procent_reducere`), `promotie_activa` (rezulta din data curenta, `data_inceput` si `data_sfarsit`), `in_stoc` (rezulta din `stoc`) sau vechimea brandului (rezulta din `an_infiintare`).

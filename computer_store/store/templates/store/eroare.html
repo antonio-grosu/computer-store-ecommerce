@@ -1,0 +1,9 @@
+{% extends "store/baza.html" %}
+{% block title %}{{ titlu }}{% endblock %}
+{% block content %}
+<section class="in-lucru">
+  <h1>{{ titlu }}</h1>
+  <p>{{ mesaj }}</p>
+  <p><a href="{% url 'produse' %}">Inapoi la produse</a></p>
+</section>
+{% endblock %}

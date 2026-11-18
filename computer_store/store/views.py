@@ -2,8 +2,14 @@ from collections import Counter
 from datetime import datetime
 from urllib.parse import urlencode, urlparse
 
+from django.conf import settings
+from django.core.paginator import Paginator
+from django.db.models import Prefetch
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.encoding import escape_uri_path
+
+from .models import Categorie, Produs, SpecificatieTehnica
 
 
 ZILE = ["Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"]
@@ -140,7 +146,7 @@ def citeste_coloane(request, erori):
 
 
 def exemplu_template(request):
-    return render(request, "exemplu_template.html",
+    return render(request, "store/exemplu_template.html",
         {
             "titlu_tab": "Titlu fereastra",
             "titlu_articol": "Titlu afisat",
@@ -150,17 +156,17 @@ def exemplu_template(request):
 
 
 def exemplu_template2(request):
-    return render(request, "template2.html")
+    return render(request, "store/template2.html")
 
 
 def index(request):
     inregistreaza_accesare(request)
-    return render(request, "index.html")
+    return render(request, "store/index.html")
 
 
 def info(request):
     accesare = inregistreaza_accesare(request)
-    return render(request, "info.html", {
+    return render(request, "store/info.html", {
         "sectiune_data": accesare.calculeaza_data(request.GET.get("data", "")),
     })
 
@@ -200,7 +206,7 @@ def log(request):
     contor = Counter(accesare.pagina() for accesare in accesari)
     maxim, minim = max(contor.values()), min(contor.values())
 
-    return render(request, "log.html", {
+    return render(request, "store/log.html", {
         "selectie": selectie,
         "coloane": coloane,
         "randuri": [[valoare_tabel(accesare, nume) for nume in coloane] for accesare in selectie],
@@ -224,26 +230,131 @@ def accesare(request, id_accesare):
     context = {"id_accesare": id_accesare, "accesare": gasita}
     if gasita:
         context["data"] = formateaza_data_ro(gasita.data)
-    return render(request, "accesare.html", context, status=200 if gasita else 404)
+    return render(request, "store/accesare.html", context, status=200 if gasita else 404)
 
 
 def despre(request):
     inregistreaza_accesare(request)
-    return render(request, "despre.html")
+    return render(request, "store/despre.html")
 
 
 def istoric(request):
     inregistreaza_accesare(request)
-    return render(request, "istoric.html")
+    return render(request, "store/istoric.html")
 
 
 def pagina_in_lucru(request, nume_pagina):
     inregistreaza_accesare(request)
-    return render(request, "in_lucru.html", {"nume_pagina": nume_pagina})
+    return render(request, "store/in_lucru.html", {"nume_pagina": nume_pagina})
+
+
+COLOANE_SORTARE = {
+    "nume": "Nume",
+    "pret": "Pret",
+    "data_adaugare": "Data adaugarii",
+    "stoc": "Stoc",
+}
+
+
+def url_cu_taguri(request, taguri):
+    parametri = request.GET.copy()
+    parametri.setlist("tag", taguri)
+    parametri.pop("pagina", None)
+    query = parametri.urlencode()
+    cale = escape_uri_path(request.path)
+    return f"{cale}?{query}" if query else cale
+
+
+def afiseaza_produse(request, produse, context):
+    erori = []
+
+    coloana = request.GET.get("coloana", "nume")
+    if coloana not in COLOANE_SORTARE:
+        erori.append(f'Nu se poate sorta dupa "{coloana}". Coloanele permise sunt: '
+                     + ", ".join(COLOANE_SORTARE) + ".")
+        coloana = "nume"
+    sort = request.GET.get("sort", "a")
+    if sort not in ("a", "d"):
+        erori.append(f'Parametrul sort primeste valoarea a (crescator) sau d (descrescator), nu "{sort}".')
+        sort = "a"
+
+    taguri_active = list(dict.fromkeys(request.GET.getlist("tag")))
+    if taguri_active:
+        produse = produse.filter(taguri__contains=taguri_active)
+
+    produse = (
+        produse.select_related("categorie")
+        .prefetch_related(Prefetch(
+            "specificatii",
+            queryset=SpecificatieTehnica.objects.filter(evidentiata=True).order_by("nume_specificatie"),
+            to_attr="specificatii_evidentiate",
+        ))
+        .order_by(("-" if sort == "d" else "") + coloana, "pk")
+    )
+    pagina = Paginator(produse, settings.PROD_PER_PAG).get_page(request.GET.get("pagina"))
+
+    for produs in pagina:
+        produs.linkuri_taguri = [
+            (tag, url_cu_taguri(request, taguri_active if tag in taguri_active else taguri_active + [tag]),
+             tag in taguri_active)
+            for tag in produs.taguri
+        ]
+
+    context.update({
+        "pagina": pagina,
+        "erori": erori,
+        "coloane": COLOANE_SORTARE.items(),
+        "coloana": coloana,
+        "sort": sort,
+        "taguri_active": taguri_active,
+        "linkuri_taguri_active": [
+            (tag, url_cu_taguri(request, [t for t in taguri_active if t != tag]))
+            for tag in taguri_active
+        ],
+    })
+    return render(request, "store/produse.html", context)
 
 
 def produse(request):
-    return pagina_in_lucru(request, "Produse")
+    inregistreaza_accesare(request)
+    return afiseaza_produse(request, Produs.objects.all(), {"titlu": "Produse"})
+
+
+def categorie(request, nume_categorie):
+    inregistreaza_accesare(request)
+    try:
+        categorie = Categorie.objects.get(nume=nume_categorie)
+    except Categorie.DoesNotExist:
+        return render(request, "store/eroare.html", {
+            "titlu": "Categorie inexistenta",
+            "mesaj": f'Nu exista nicio categorie cu numele "{nume_categorie}".',
+        }, status=404)
+    return afiseaza_produse(request, categorie.produse.all(), {
+        "titlu": categorie.nume,
+        "categorie": categorie,
+    })
+
+
+def produs(request, id_produs):
+    inregistreaza_accesare(request)
+    try:
+        produs = Produs.objects.select_related("categorie", "brand").get(pk=id_produs)
+    except Produs.DoesNotExist:
+        return render(request, "store/eroare.html", {
+            "titlu": "Produs inexistent",
+            "mesaj": f"Nu exista niciun produs cu id-ul {id_produs}.",
+        }, status=404)
+
+    asemanatoare = (
+        Produs.objects.filter(categorie=produs.categorie)
+        .exclude(pk=produs.pk)
+        .order_by("?")[:settings.PROD_ACEEASI_CATEGORIE]
+    )
+    return render(request, "store/produs.html", {
+        "produs": produs,
+        "specificatii": produs.specificatii.order_by("-evidentiata", "nume_specificatie"),
+        "asemanatoare": asemanatoare,
+    })
 
 
 def configurator(request):
