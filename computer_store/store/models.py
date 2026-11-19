@@ -59,6 +59,7 @@ class Brand(models.Model):
         verbose_name = "brand"
         verbose_name_plural = "branduri"
         ordering = ["nume"]
+        permissions = [("promoveaza_brand", "Poate promova brandul respectiv")]
 
     def __str__(self):
         return self.nume

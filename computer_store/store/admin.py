@@ -6,12 +6,28 @@ from django.urls import reverse_lazy
 from django.utils.html import format_html
 
 from .models import Brand, Categorie, Produs, Promotie, ServiciuAditional, SpecificatieTehnica
+from django.contrib.auth.models import User, Permission, Group
+
 
 admin.site.site_title = "Computer Store admin"
 admin.site.site_header = "Administrare Computer Store"
 admin.site.index_title = "Panou de administrare al magazinului"
 admin.site.site_url = reverse_lazy("index")
 
+
+
+try:
+    user = User.objects.get(username='antonio')
+except User.DoesNotExist:
+    raise Exception(f'Nu exista userul "{'antonio'}".')
+
+permisiune = Permission.objects.get(content_type__app_label="store", codename="promoveaza_brand")
+
+grup, _ = Group.objects.get_or_create(name="GRUP test")
+grup.permissions.add(permisiune)
+
+user.groups.add(grup)
+user.user_permissions.add(permisiune)
 
 class SpecificatieTehnicaInline(admin.TabularInline):
     model = SpecificatieTehnica

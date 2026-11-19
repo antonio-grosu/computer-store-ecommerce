@@ -161,7 +161,9 @@ def exemplu_template2(request):
 
 def index(request):
     inregistreaza_accesare(request)
-    return render(request, "store/index.html")
+    return render(request, "store/index.html", {
+        "poate_promova": request.user.has_perm("store.promoveaza_brand"),
+    })
 
 
 def info(request):
